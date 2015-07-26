@@ -1,0 +1,1 @@
+module Make: Lnf.MakeType

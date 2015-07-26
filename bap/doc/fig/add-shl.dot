@@ -1,0 +1,31 @@
+digraph shladd {
+  node [shape=box, style=filled, fillcolor="#F5F5F5"];
+  edge [color="#0000FF"];
+labelfontsize=12;
+margin=0;
+nodesep=.15;
+ranksep=.25;
+ 1 -> 2;
+ 2 -> 3 [color="#00ff00"];
+ 3 -> 5;
+ 2 -> 4 [color="#ff0000"];
+ 4 -> 5;
+ 5 -> 6;
+ 6 -> 7 [color="#00ff00"];
+ 6 -> 8 [color="#ff0000"];
+ 7 -> 9;
+ 8 -> 9;
+ 9 -> 11 [color="#00ff00"];
+ 9 -> 10 [color="#ff0000"];
+ 1 [label="EBX := EBX + EAX"];
+ 2 [label="if addition carried"];
+ 3 [label="CF := 1"];
+ 4 [label="CF := 0"];
+ 5 [label="EBX := EBX << ECX & 0x1f"];
+ 6 [label="if shift amount was zero"];
+ 7 [label="CF is unchanged"]; 
+ 8 [label="CF is the last bit shifted out of EBX"];
+ 9 [label="if CF == 1"];
+ 11 [label="<target instr>"];
+ 10 [label="<next instruction>"];
+}

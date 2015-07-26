@@ -1,0 +1,198 @@
+\section{Traces}
+
+In this section, we will explain how to use our PIN-based trace
+recording tool to record a trace.  We then show how to perform common
+trace analysis tasks.
+
+\subsection{Setup}
+
+The PIN trace tool is located in the \cmdline{pintraces/} directory.
+Because of licensing reasons, we cannot distribute PIN with the trace
+tool.  The PIN tool cannot be built until PIN has been extracted
+inside of the \bap directory.  In the following, we assume that
+\cmdline{\$BAPDIR} is set to the \bap directory. For example, if you
+extracted \bap to \cmdline{/home/user/Downloads/bap-x.y}, then you should
+replace \cmdline{\$BAPDIR} below with
+\texttt{/home/user/Downloads/bap-x.y}. Once downloaded, PIN should be
+extracted to \cmdline{\$BAPDIR/pin}.  On Linux, running the
+./getpin.sh script from the \cmdline{\$BAPDIR/pintraces}
+directory will automatically download and extract PIN for Linux; the
+user is responsible for accepting the PIN license agreements.
+
+On Windows, the process is more complicated.  We usually test with
+Windows 7 and Windows XP SP3, but expect NT, 2000, 2003, Vista, and 7
+to work.  First, make sure that \cmdline{\$BAPDIR} contains no
+spaces. Then, install GNU Make for Windows
+(\url{http://gnuwin32.sourceforge.net/packages/make.htm}) and Visual
+C++ 2010 Express\footnote{This is the latest version of Visual Studio
+  that PIN is compatible with.}
+(\url{http://www.microsoft.com/visualstudio/en-us/products/2010-editions/visual-cpp-express}).
+Make sure to add the directory containing \texttt{make} (the default
+is \verb!C:\Program Files\GnuWin32\bin!) to the Windows \texttt{Path}
+environment variable.  Also download PIN and extract it to the
+\cmdline{\$BAPDIR/pin} directory.  Next, we need to upgrade the Visual
+Studio project for Google's protobuffers library, which our PIN tool
+depends on\footnote{This can be done automatically at the command line
+  using devenv.exe, but this tool is only part of Visual Studio
+  proper; it does not come with the Express versions.}.  To do this,
+navigate to the
+\cmdline{\$BAPDIR/libtracewrap/libtrace/protobuf/vsprojects} directory
+and open \cmdline{protobuf.sln}.  When the Visual Studio Conversion
+Wizard appears, click Finish and close the summary window.  It is
+normal for the conversion process to have warnings, but not errors.
+Next, right click on the libprotobuf project in the Solution Explorer,
+and select Properties.  Select the Release configuration at the top of
+the dialog box, and then navigate to the C/C++ Code Generation
+settings.  Change the Runtime Library to Multi-threaded
+(/MT)\footnote{If you skip this step, you will get unresolved symbol
+  errors while linking the PIN tool}.  Finally, close Visual Studio
+and save the changes to the project.  Open a Visual Studio command
+prompt, navigate to \cmdline{\$BAPDIR/libtracewrap/libtrace/src/cpp}
+and run \cmdline{make -f Makefile.windows} to build protobuffers and
+the libtrace library.
+
+The PIN tool itself can be built by executing \cmdline{make} in the
+\cmdline{\$BAPDIR/pintraces} directory on Linux.  On Windows, execute
+\begin{verbatim}
+make -f Makefile.pin PIN_ROOT=$BAPDIR/pin TARGET=ia32
+\end{verbatim}
+instead. After compilation, the PIN tool for recording x86 programs
+should exist in \cmdline{\$BAPDIR/pintraces/obj-ia32/gentrace.so} (or
+\cmdline{gentrace.dll} on Windows).  If you are running on a x86-64
+host, you should also have a PIN tool for recording x86-64 programs in
+\cmdline{\$BAPDIR/pintraces/obj-intel64/gentrace.so}.  In the rest of
+the chapter, we will assume Linux is being used; most interaction with
+the trace tool is the same on Windows.
+
+\subsection{Recording a trace}
+
+To see the command line options to the trace tool, execute
+
+\begin{verbatim}
+$BAPDIR/utils/gentrace.bash -help -- /bin/ls
+\end{verbatim}
+on Linux.  On Windows, use
+\begin{verbatim}
+powershell $BAPDIR/utils/gentrace.ps1 -- -help -- cmd.exe
+\end{verbatim}
+instead.
+
+By default, the trace tool will only log instructions that are
+\emph{tainted}, i.e., those that depend on user input.  The
+\cmdline{-taint-*} command line options are used to mark various
+inputs as being tainted.  For instance, \cmdline{-taint-files readme}
+marks the file \cmdline{readme} as being tainted.
+
+We will record a trace of a simple buffer overflow.  Run
+
+\begin{verbatim}
+echo "helloooooooooooooooooooooooooooooooooo" > readme
+\end{verbatim}
+
+to create the input file.  Then run
+
+\begin{verbatim}
+$BAPDIR/utils/gentrace.bash -taint-files readme \
+ -- $BAPDIR/tests/C/bof1 readme
+\end{verbatim}
+
+The PIN tool will output many debugging messages; this is normal.  If
+the trace tool detected the buffer overflow, it will print ``Stack
+smashing detected'' near the end of the logs.  At this point, there
+should be a trace file ending with suffix bpt in the current working
+directory.  In the following commands, we assume this file is named
+trace.bpt.
+
+To lift the trace data and print it using \cmdline{iltrans} run:
+
+\begin{verbatim}
+iltrans -trace trace.bpt -pp-ast /dev/stdout
+\end{verbatim}
+
+\cmdline{iltrans} processes traces by lifting the entire trace into
+memory, and then performing the specified operation(s).
+Unfortunately, this makes it unsuitable for processing traces that do
+not fit in memory.  \cmdline{streamtrans} is an alternative utility
+for processing traces in a \emph{streaming} model.  Instead of lifting
+the entire trace at once, \cmdline{streamtrans} loads only a small
+part of it at a time.  The downside to \cmdline{streamtrans} is that
+many traces capabilities in BAP are implemented in \cmdline{iltrans}
+but not \cmdline{streamtrans}.
+
+To lift the trace data and print it using \cmdline{streamtrans} use:
+
+\begin{verbatim}
+streamtrans -tracestream trace.bpt -pp-ast /dev/stdout
+\end{verbatim}
+
+Regardless of the lifting tool, the lifted trace data should look
+something like:
+
+\begin{verbatim}
+addr 0x8048639 @asm "mov    0x804a038,%eax" @tid "0"
+  @context "R_EAX_32" = 0x68, 1, u32, wr
+  @context "mem32[0x804a038]" = 0x5, 0, u8, rd
+  @context "mem32[0x804a039]" = 0x0, 0, u8, rd
+  @context "mem32[0x804a03a]" = 0x0, 0, u8, rd
+  @context "mem32[0x804a03b]" = 0x0, 0, u8, rd
+label pc_0x8048639
+R_EAX_32:u32 = mem32:?u32[0x804a038:u32, e_little]:u32
+\end{verbatim}
+
+In addition to the lifted IL, there are several trace-specific
+annotations.  \texttt{@tid "0"} indicates that thread 0 executed this
+instruction.  The \texttt{@context} attribute provides information
+about this instruction's operands.  The four values in the tuple refer
+to the operand's initial value, its taint identifier, data type, and
+access type, respectively.  Positive taint identifiers indicate the
+operand was only tainted by the taint source with the corresponding
+number.  For example, taint identifier five generally corresponds to
+the fifth symbolic byte introduced into the program.  An operand may
+have a taint identifier of negative one if it is tainted by multiple
+source bytes.  A taint identifier of zero corresponds to an untainted
+operand.  The access type is one of read only (rd), write only (wr),
+or both (rw).
+
+It is also possible to concretize the trace after lifting, which
+removes jumps and performs memory concretization, by executing
+
+\begin{verbatim}
+iltrans -trace trace.bpt -trace-concrete -pp-ast /dev/stdout
+\end{verbatim}
+or
+\begin{verbatim}
+streamtrans -tracestream trace.bpt -trace-concrete -pp-ast /dev/stdout
+\end{verbatim}
+
+Adding the -trace-check option before -trace-concrete causes BAP to
+compare its internal evaluator's notion of state with the actual
+values recorded in the trace.  It can be used to check for bugs in the
+IL.  For example:
+
+\begin{verbatim}
+iltrans -trace trace.bpt -trace-check -trace-concrete
+\end{verbatim}
+or
+\begin{verbatim}
+streamtrans -tracestream trace.bpt -trace-check -trace-concrete-drop
+\end{verbatim}
+
+
+Finally, running
+%
+\begin{verbatim}
+iltrans -trace trace.bpt -trace-formula f
+\end{verbatim}
+or
+\begin{verbatim}
+streamtrans -tracestream trace.bpt -trace-formula f
+\end{verbatim}
+
+will symbolically execute the trace and output the generated verification
+condition to the file f. This can then be solved with stp to find satisfying
+answers to the trace.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 

@@ -1,0 +1,66 @@
+digraph G {
+  1 [label="label pc_0_0", style=filled, fontname="Courier"];
+  2 [label="label pc_0_1", style=filled, fontname="Courier"];
+  3 [label="label pc_0_2", style=filled, fontname="Courier"];
+  4 [label="label pc_0_3", style=filled, fontname="Courier"];
+  5 [label="4.", color="#66CCFF", style=filled, fontname="Courier"];
+  6 [label="0.", color="#66CCFF", style=filled, fontname="Courier"];
+  7 [label="label pc_0_3", style=filled, fontname="Courier"];
+  8 [label="label pc_0_2", style=filled, fontname="Courier"];
+  9 [label="label pc_0_1", style=filled, fontname="Courier"];
+  11 [label="label pc_0_2", style=filled, fontname="Courier"];
+  12 [label="label pc_0_3", style=filled, fontname="Courier"];
+  13 [label="7.", color="#66CCFF", style=filled, fontname="Courier"];
+  14 [label="1.", color="#66CCFF", style=filled, fontname="Courier"];
+  15 [label="label pc_0_3", style=filled, fontname="Courier"];
+  16 [label="label pc_0_2", style=filled, fontname="Courier"];
+  20 [label="8.", color="#66CCFF", style=filled, fontname="Courier"];
+  21 [label="6.", color="#66CCFF", style=filled, fontname="Courier"];
+  23 [label="label pc_0_3", style=filled, fontname="Courier"];
+  24 [label="10.", color="#66CCFF", style=filled, fontname="Courier"];
+  25 [label="5.", color="#66CCFF", style=filled, fontname="Courier"];
+  26 [label="label pc_0_3", style=filled, fontname="Courier"];
+  28 [label="label pc_0_3", style=filled, fontname="Courier"];
+  29 [label="12.", color="#66CCFF", style=filled, fontname="Courier"];
+  30 [label="2.", color="#66CCFF", style=filled, fontname="Courier"];
+  31 [label="label pc_0_3", style=filled, fontname="Courier"];
+  33 [label="13.", color="#66CCFF", style=filled, fontname="Courier"];
+  34 [label="3.", color="#66CCFF", style=filled, fontname="Courier"];
+  38 [label="14.", color="#66CCFF", style=filled, fontname="Courier"];
+  39 [label="11.", color="#66CCFF", style=filled, fontname="Courier"];
+  41 [label="15.", color="#66CCFF", style=filled, fontname="Courier"];
+  42 [label="9.", color="#66CCFF", style=filled, fontname="Courier"];
+  
+  
+  1 -> 2 [label="t", color="#99CCFF"];
+  1 -> 9 [label="f", color="#99CCFF"];
+  2 -> 11 [label="t", color="#99CCFF"];
+  2 -> 16 [label="f", color="#99CCFF"];
+  3 -> 28 [label="t", color="#99CCFF"];
+  3 -> 31 [label="f", color="#99CCFF"];
+  4 -> 33 [label="t", color="#99CCFF"];
+  4 -> 34 [label="f", color="#99CCFF"];
+  7 -> 5 [label="t", color="#99CCFF"];
+  7 -> 6 [label="f", color="#99CCFF"];
+  8 -> 4 [label="t", color="#99CCFF"];
+  8 -> 7 [label="f", color="#99CCFF"];
+  9 -> 3 [label="t", color="#99CCFF"];
+  9 -> 8 [label="f", color="#99CCFF"];
+  11 -> 23 [label="t", color="#99CCFF"];
+  11 -> 26 [label="f", color="#99CCFF"];
+  12 -> 20 [label="t", color="#99CCFF"];
+  12 -> 21 [label="f", color="#99CCFF"];
+  15 -> 13 [label="t", color="#99CCFF"];
+  15 -> 14 [label="f", color="#99CCFF"];
+  16 -> 12 [label="t", color="#99CCFF"];
+  16 -> 15 [label="f", color="#99CCFF"];
+  23 -> 41 [label="t", color="#99CCFF"];
+  23 -> 42 [label="f", color="#99CCFF"];
+  26 -> 24 [label="t", color="#99CCFF"];
+  26 -> 25 [label="f", color="#99CCFF"];
+  28 -> 38 [label="t", color="#99CCFF"];
+  28 -> 39 [label="f", color="#99CCFF"];
+  31 -> 29 [label="t", color="#99CCFF"];
+  31 -> 30 [label="f", color="#99CCFF"];
+  
+  }

@@ -1,0 +1,10 @@
+Pin 2.13 kit 61147
+ Starting program
+ New thread starting
+ First tainted instruction.
+ Not logging prefetch instruction.
+ Not logging prefetch instruction.
+ Not logging prefetch instruction.
+ Stack smashing detected
+ done.
+ Time taken: 82720000

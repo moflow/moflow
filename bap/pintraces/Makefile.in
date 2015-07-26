@@ -1,0 +1,10 @@
+.PHONY: default tags
+default: all
+
+%:
+ifeq ("@ARCH_X64@","true")
+	(make -f Makefile.pin PIN_ROOT=@PIN_ROOT@ TARGET=intel64 ARCH_X64="@ARCH_X64@" $@)
+endif
+	(make -f Makefile.pin PIN_ROOT=@PIN_ROOT@ TARGET=ia32 ARCH_X64="@ARCH_X64@" $@)
+
+tags:

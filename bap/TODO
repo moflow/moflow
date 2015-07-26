@@ -1,0 +1,23 @@
+Disassembly:
+* Include symbols in disassembly
+* Include section names in disassembly
+* Include data?
+
+Design issues:
+* Change attributes from attribute list to a set of attribute.
+* When optimizing code, try to keep the more meaningful variable names.
+* Inter-procedural analysis
+
+Features:
+* Function boundary identification for x86-64
+* Enable (re-)lifting of resolved indirect jumps in BIL
+
+Other:
+* Fix up documentation.
+* Write more .mli files.
+* Depgraphs.ml: Make a separate graph type for depgraphs.ml with
+   Lang.exp = unit
+* Cfg.mli: How can we make expressions more structured?
+* Should we add edge conditions to the visitor?
+* Do we really want to_astvar and to_astloc? I don't think we are
+  using them right now.

@@ -1,0 +1,55 @@
+\section{\texttt{toil} and \texttt{get\_functions}: Lifting Binary Code to \bil}
+
+The \texttt{toil} and \texttt{get\_functions} tools both lift binary
+code to \bil.  Lifting up binary code to the IL consists of two steps:
+\begin{itemize}
+\item First, the binary file is opened using libbfd. BAP can read
+  binaries from any bfd-supported binary, including ELF and PE
+  binaries.
+
+\item Second, the executable code in the binary is disassembled.
+  \texttt{toil} currently uses a linear sweep disassembler, whereas
+  \texttt{get\_functions} uses more advanced CFG recovery algorithms.
+
+\item Each assembly instruction discovered during disassembly is then
+  lifted directly to \bil.
+\end{itemize}
+
+Lifted assembly instructions have all of the side-effects explicitly
+exposed.  As a result, a single typical assembly instruction will be
+lifted as a sequence of \bil instructions.  For example, the {\tt add
+  \$2, \%eax} instruction is lifted as:
+
+\begin{centering}
+\begin{scriptsize}
+\verbatiminput{chap-tools/add2.il}
+\end{scriptsize}
+\end{centering}
+%
+The lifted \bil code explicitly detail all the side-effects of the
+{\tt add} instruction, including all six flags that are updated by the
+operation.
+
+In addition to binary files, {\tt toil} can also lift an instruction
+trace to the IL.  The most recent BAP trace format can be lifted using
+the {\tt -trace} option.
+
+{\tt toil} can output to several formats for easy parsing, including
+protobuf, JSON, and XML.  These formats are selected via the {\tt
+  -topb}, {\tt -tojson}, and {\tt -toxml} options.  Code for reading
+the protobuf encoding is located in the {\tt piqi-files/protobuf}
+directory.
+
+The \texttt{get\_functions} utility identifies functions in the
+designated binary and, for each function, outputs files in the current
+directory containing the BIL representation and a CFG representation.
+Unlike \texttt{toil}, \texttt{get\_functions} employs CFG recovery
+algorithms instead of linear disassembly.  In practice, this means
+that \texttt{get\_functions} can be used to recover BIL for functions
+that use indirect jumps to implement switches.
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "../main"
+%%% End: 

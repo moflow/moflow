@@ -1,0 +1,62 @@
+/*
+  Low level interface to libasmir. Avoid using this directly. Instead, use
+  the Asmir module.
+*/
+
+// #include "libbfd.idl"
+import "libbfd.idl";
+
+typedef [abstract,errorcheck(null_check)] void* asm_program_t;
+typedef [abstract] void* trace_frames_t;
+typedef [abstract] void* trace_frame_t;
+
+typedef int threadid_t;
+
+quote(C, " \
+    void null_check(void *ptr) { \
+        if (ptr == NULL) { \
+            caml_failwith(\"Unexpected NULL encountered.\"); \
+        } \
+    } \
+");
+
+[length_is(*num)] asymbol*
+asmir_get_symbols(asm_program_t prog,
+		  [out] long *num);
+
+[length_is(*num)] asymbol*
+asmir_get_all_symbols(asm_program_t prog,
+                      [out] long *num);
+
+[length_is(*num)] asymbol*
+asmir_get_dynsymbols(asm_program_t prog,
+                     [out] long *num);
+
+[length_is(*num)] section_ptr*
+asmir_get_all_sections(asm_program_t prog,
+                       [out] long *num);
+
+asm_program_t asmir_open_file([string] char *filename, address_t base, [string,unique] char *target);
+void asmir_close(asm_program_t p);
+[string] char* asmir_string_of_insn(asm_program_t prog, address_t inst);
+enum bfd_architecture asmir_get_asmp_arch(asm_program_t prog);
+unsigned long asmir_get_asmp_mach(asm_program_t prog);
+address_t asmir_get_base_address(asm_program_t prog);
+
+address_t asmir_get_sec_startaddr(asm_program_t p, [string] const char *sectionname);
+address_t asmir_get_sec_endaddr(asm_program_t p, [string] const char *sectionname);
+address_t asmir_get_start_addr(asm_program_t p);
+int asmir_get_instr_length(asm_program_t p, address_t addr);
+
+bfdp asmir_get_bfd(asm_program_t p);
+
+// returns a special asm_program which contains only the given instruction
+// takes a char array for historical reasons
+asm_program_t
+byte_insn_to_asmp(enum bfd_architecture arch, unsigned long mach, address_t addr,
+		  [size_is(len)] char *bb_bytes, int len);
+
+// LLVM needs functions from llvm.cpp to be linked to the ocaml
+// binaries.  This is a dummy entry to force these symbols to be
+// linked.
+void fake_assert();
