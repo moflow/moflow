@@ -60,7 +60,7 @@ rm -f solvers/makefile.inc
 if `test "x$with_z3" = "xyes"`; then
    cat >>solvers/makefile.inc <<"EOF"
 SOLVER_PPFLAGS=-D WITH_Z3_BINDINGS
-SOLVER_CLIBS = z3stubs z3
+SOLVER_CLIBS = z3stubs z3 rt
 EOF
 echo "SOLVER_SOURCES = $z3_dir/ocaml/z3.ml" >>solvers/makefile.inc
 echo "SOLVER_LIBDIRS = $z3_dir/lib" >>solvers/makefile.inc
