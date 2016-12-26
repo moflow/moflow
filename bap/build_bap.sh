@@ -13,8 +13,7 @@ apt-get update && apt-get install -y \
 # hack for z3
 ln -s /usr/lib/x86_64-linux-gnu/libgmp.so.10 /usr/lib/x86_64-linux-gnu/libgmp.so.3
 
-git clone https://github.com/moflow/moflow.git
-cd moflow/bap && ./autogen.sh && \
+./autogen.sh && \
 cd solvers && ./getz3.sh && cd .. && \
 cd ocamlgraph && ./configure && make && make install-findlib && cd .. && \
 cd pintraces && ./getpin.sh && cd .. && \
