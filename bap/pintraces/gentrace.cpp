@@ -2909,7 +2909,11 @@ void read_visited_bbs(FILE *f, set<ADDRINT> *visited_bbs){
   ADDRINT addr;
 
   while(!feof(f) && !ferror(f)){
+#ifdef ARCH_64
+    int r = fscanf(f, "0x%lx\n", &addr);
+#else
     int r = fscanf(f, "0x%x\n", &addr);
+#endif
     if(r != 1){
       break;
     }
