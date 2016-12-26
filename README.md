@@ -20,11 +20,11 @@ SLICER is a tool that assists with root cause analysis by slicing forward or bac
 
 INSTALL 
 
-git clone https://github.com/moflow/moflow.git
-cd moflow
-(cd bap && sudo ./build_bap.sh)
-(cd slicer && make)
-(cd egas && make)
+git clone https://github.com/moflow/moflow.git  
+cd moflow  
+(cd bap && sudo ./build_bap.sh)  
+(cd slicer && make)  
+(cd egas && make)  
 
 
 USAGE
