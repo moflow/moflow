@@ -14,7 +14,8 @@ apt-get update && apt-get install -y \
 ln -s /usr/lib/x86_64-linux-gnu/libgmp.so.10 /usr/lib/x86_64-linux-gnu/libgmp.so.3
 
 ./autogen.sh && \
-cd solvers && ./getz3.sh && cd .. && \
-cd ocamlgraph && ./configure && make && make install-findlib && cd .. && \
-cd pintraces && ./getpin.sh && cd .. && \
+( cd solvers && ./getz3.sh ) && \
+( cd ocamlgraph && ./configure && make -i && make -i install-findlib ) && \
+( cd pintraces && ./getpin.sh ) && \
 ./configure --with-z3=`pwd`/solvers/z3 && make -i 
+ln -s bap/utils ..

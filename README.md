@@ -5,7 +5,7 @@ bap-0.8 is included with required modifications to the gentrace tool and bap tra
 
 MOFLOW FRAMEWORK
 
-Moflow is a software security framework containing tools for vulnerability, discovery, and triage. Moflow is focused on providing automated solutions based upon the latest research to assist in building more secure software. The vulnerability discovery tools include an automated test generation engine based on concolic execution combining dynamic taint tracing and symbolic execution, which is considered state of the art for zero-configuration parser fuzzing. The triage tools include the ability to automatically determine input bytes related to an exception using dynamic trace slicing algorithms as well as a forward symbolic execution based exploitability analysis. Mitigations include a novel use-after-free exploit prevention technique that is implemented as a LLVM compiler plugin.
+Moflow is a software security framework containing tools for vulnerability, discovery, and triage. Moflow is focused on providing automated solutions based upon the latest research to assist in building more secure software. The vulnerability discovery tools include an automated test generation engine based on concolic execution combining dynamic taint tracing and symbolic execution, which is considered state of the art for zero-configuration parser fuzzing. The triage tools include the ability to automatically determine input bytes related to an exception using dynamic trace slicing algorithms as well as a forward symbolic execution based exploitability analysis. 
 
 EGAS 
 
