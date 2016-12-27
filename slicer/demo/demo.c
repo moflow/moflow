@@ -75,6 +75,7 @@ void test_tlv_triage(char *buf)
   {
     printf("total_size: %d, record_count %d\n", h->total_size, h->record_count);
   }
+  fflush(stdout);
 
   newbuf = (char *)malloc(BUF_SIZE);
   memcpy(newbuf, buf, h->total_size); // readAV if total_size > BUF_SIZE
