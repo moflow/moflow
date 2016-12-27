@@ -19,8 +19,7 @@ RUN ( cd bap && ./build_bap.sh ) && \
     ( cd egas && make ) && \
     mkdir tracer && \
     cp bap/pintraces/obj-ia32/gentrace.so tracer/gentrace32.so && \
-    cp bap/pintraces/obj-intel64/gentrace.so tracer/gentrace64.so && \
-    ( cd bap && make clean ) 
+    cp bap/pintraces/obj-intel64/gentrace.so tracer/gentrace64.so 
  
 
 CMD /bin/bash
