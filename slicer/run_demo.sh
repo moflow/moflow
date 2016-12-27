@@ -1,6 +1,9 @@
 #!/bin/bash
 
-echo "Tracing taint propagation in demo vuln binary with pintool.."
+echo "Build demo binary.."
+( cd demo && make )
+
+echo -e "\n\nTracing taint propagation in demo vuln binary with pintool.."
 sleep 2
 sudo ../bap/pin/pin -t ../tracer/gentrace32.so -taint_indices -taint_files input.txt -snapshot-file /tmp/demo.snapshot -o /tmp/demo.trace -- ./demo/demo tlv demo/input.txt
 
