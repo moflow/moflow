@@ -7,7 +7,7 @@ This tool has been developed on Ubuntu 14.04 x64
 
 ##MOFLOW FRAMEWORK  
 
-Moflow is a software security framework containing tools for vulnerability, discovery, and triage. Moflow is focused on providing automated solutions based upon the latest research to assist in building more secure software. The vulnerability discovery tools include an automated test generation engine based on concolic execution combining dynamic taint tracing and symbolic execution, which is considered state of the art for zero-configuration parser fuzzing. The triage tools include the ability to automatically determine input bytes related to an exception using dynamic trace slicing algorithms as well as a forward symbolic execution based exploitability analysis.  
+Moflow is a software security framework containing tools for vulnerability discovery and triage. Moflow is focused on providing automated solutions based upon the latest research to assist in building more secure software. The vulnerability discovery tools include an automated test generation engine based on concolic execution combining dynamic taint tracing and symbolic execution, which is considered state of the art for zero-configuration parser fuzzing. The triage tools include the ability to automatically determine input bytes related to an exception using dynamic trace slicing algorithms as well as a forward symbolic execution based exploitability analysis.  
 
 ###EGAS  
 
@@ -17,6 +17,7 @@ EGAS is an automated test generation tool based on concolic execution. EGAS leve
 
 SLICER is a tool that assists with root cause analysis by slicing forward or backward from arbitrary points in a dataflow trace. Graph slicing allows the user to determine dependencies between a selected point of execution and previous or future instructions. This is used in crash analysis to slice from the corrupted value causing an exception back to the specific input bytes that caused the exception, greatly reducing the total number of instructions needed to be analyzed to determine root cause.  
 
+***
 
 **INSTALL**  
 
