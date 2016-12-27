@@ -14,12 +14,16 @@ COPY . /moflow
 
 WORKDIR /moflow
 RUN ( cd bap && ./build_bap.sh ) && \
+    ( cd bap/libtracewrap/libtrace/protobuf && make install ) && \
+    mv /usr/local/lib/libproto* /usr/lib/x86_64-linux-gnu && \
+    ( cd bap/libtracewrap/libtrace32/protobuf && make install ) && \
+    ldconfig /usr/local/lib && \
+    mkdir tracer && \
+    cp bap/pintraces/obj-ia32/gentrace.so tracer/gentrace32.so && \
+    cp bap/pintraces/obj-intel64/gentrace.so tracer/gentrace64.so && \
     mkdir utils && find bap/utils -perm /a+x -exec cp {} utils \; && \
     ( cd slicer && make ) && \
     ( cd egas && make ) && \
-    mkdir tracer && \
-    cp bap/pintraces/obj-ia32/gentrace.so tracer/gentrace32.so && \
-    cp bap/pintraces/obj-intel64/gentrace.so tracer/gentrace64.so 
- 
+    ( cd bap && make clean )
 
 CMD /bin/bash

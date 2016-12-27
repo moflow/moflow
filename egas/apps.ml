@@ -9,13 +9,13 @@ let bAP_DIR = "../bap"
 (* file to taint, trace filename, app, params.
  * params:string array*)
 let make_pin_cmd sample_fn trace_fn app params = 
-  let p1 = [|"pin"; "-t"; bAP_DIR^"/pintraces/obj-intel64/gentrace.so"; 
+  let p1 = [|"pin"; "-t"; "../tracer/gentrace64.so"; 
             "-taint_files"; sample_fn; "-o"; trace_fn; "--"; app; |] in
   Arr.append p1 params
 
 (* params:string array *) 
 let make_pin_cov_cmd bb_fn exn_fn visited_bb_file app params = 
-  let p1 = [|"pin"; "-t"; bAP_DIR^"/pintraces/obj-intel64/gentrace.so"; "-bb-file";
+  let p1 = [|"pin"; "-t"; "../tracer/gentrace64.so"; "-bb-file";
             bb_fn; "-exn-file"; exn_fn; "-visited-bb-file"; visited_bb_file; 
             "--"; app; |] in
   Arr.append p1 params
