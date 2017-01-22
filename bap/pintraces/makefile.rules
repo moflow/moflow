@@ -100,6 +100,11 @@ ifeq ($(TARGET_OS),windows)
     PROTOBUFLIBDIR = $(PROTOBUFDIR)/../vsprojects/Release
     TOOL_LDFLAGS += -Libpath:$(PROTOBUFLIBDIR)
     TOOL_LIBS += $(LIBTRACE) $(PROTOBUFLIBDIR)/libprotobuf.lib #-lz -lpthread
+else
+	TOOL_CXXFLAGS += -Iddk-inc
+    PROTOBUFLIBDIR = $(PROTOBUFDIR)/.libs
+    TOOL_LDFLAGS += -L$(PROTOBUFLIBDIR)
+    TOOL_LIBS += $(LIBTRACE) -Wl,-rpath=$(PROTOBUFLIBDIR) -lprotobuf -lz -lpthread
 endif
 TOOL_CXXFLAGS += -I$(TRACEFORMATCOMMON) -I$(TRACEFORMATDIR) -I$(TRACEFORMATPBDIR) -I$(PROTOBUFDIR) -I. -DUSING_PIN
 
