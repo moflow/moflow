@@ -17,6 +17,8 @@ all: libtrace.a
 .PHONY: clean
 clean:
 	$(RM) $(OBJS)
+	$(RM) libtrace.a
+	rm $(LIBPROTOBUF)
 	
 %.obj : %.cc
 	$(CXX) $(CXXFLAGS) /c $< /Fo$@
