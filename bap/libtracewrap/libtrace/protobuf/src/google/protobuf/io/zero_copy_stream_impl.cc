@@ -34,6 +34,12 @@
 
 #ifdef _MSC_VER
 #include <io.h>
+#include <fcntl.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#define read _read 
+#define write _write
+#define close _close
 #else
 #include <unistd.h>
 #include <sys/types.h>
