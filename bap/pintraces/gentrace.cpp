@@ -33,6 +33,9 @@
   #define dbg_printf(...)
 #endif
 
+#ifdef _MSC_VER
+#define strncasecmp(x,y,z) _strnicmp(x,y,z)
+#endif
 
 /*
  * A useful set of macros that we can customize for different

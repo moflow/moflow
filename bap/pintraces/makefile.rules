@@ -81,7 +81,7 @@ LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace
 
 ifeq ($(ARCH_X64),true)
 ifeq ($(TARGET),ia32)
-  LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace32
+  LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace
 endif
 endif
 
@@ -97,13 +97,17 @@ ifeq ($(COMPILER),gcc)
 endif
 ifeq ($(TARGET_OS),windows)
 	TOOL_CXXFLAGS += -Iddk-inc
+    PROTOBUFLIBDIR = $(PROTOBUFDIR)/../vsprojects/Release
+    TOOL_LDFLAGS += -Libpath:$(PROTOBUFLIBDIR)
+    TOOL_LIBS += $(LIBTRACE) $(PROTOBUFLIBDIR)/libprotobuf.lib #-lz -lpthread
+else
+	TOOL_CXXFLAGS += -Iddk-inc
+    PROTOBUFLIBDIR = $(PROTOBUFDIR)/.libs
+    TOOL_LDFLAGS += -L$(PROTOBUFLIBDIR)
+    TOOL_LIBS += $(LIBTRACE) -Wl,-rpath=$(PROTOBUFLIBDIR) -lprotobuf -lz -lpthread
 endif
 TOOL_CXXFLAGS += -I$(TRACEFORMATCOMMON) -I$(TRACEFORMATDIR) -I$(TRACEFORMATPBDIR) -I$(PROTOBUFDIR) -I. -DUSING_PIN
 
-# XXX We should probably use libtool
-PROTOBUFLIBDIR = $(PROTOBUFDIR)/.libs
-TOOL_LDFLAGS += -L$(PROTOBUFLIBDIR)
-TOOL_LIBS += $(LIBTRACE) -Wl,-rpath=$(PROTOBUFLIBDIR) -lprotobuf -lz -lpthread
 
 BAPOBJS = $(OBJDIR)pivot$(OBJ_SUFFIX) $(OBJDIR)pin_misc$(OBJ_SUFFIX) $(OBJDIR)pin_taint$(OBJ_SUFFIX) $(OBJDIR)reg_mapping_pin$(OBJ_SUFFIX) $(OBJDIR)winsyscalls$(OBJ_SUFFIX) $(OBJDIR)snapshot$(OBJ_SUFFIX)
 
