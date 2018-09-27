@@ -81,7 +81,7 @@ LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace
 
 ifeq ($(ARCH_X64),true)
 ifeq ($(TARGET),ia32)
-  LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace
+  LIBTRACEDIR=$(ROOT)/libtracewrap/libtrace32
 endif
 endif
 

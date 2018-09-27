@@ -1,66 +1,99 @@
 digraph G {
   1 [label="label pc_0_0", style=filled, fontname="Courier"];
-  2 [label="label pc_0_1", style=filled, fontname="Courier"];
+  2 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
   3 [label="label pc_0_2", style=filled, fontname="Courier"];
-  4 [label="label pc_0_3", style=filled, fontname="Courier"];
-  5 [label="4.", color="#66CCFF", style=filled, fontname="Courier"];
-  6 [label="0.", color="#66CCFF", style=filled, fontname="Courier"];
-  7 [label="label pc_0_3", style=filled, fontname="Courier"];
-  8 [label="label pc_0_2", style=filled, fontname="Courier"];
-  9 [label="label pc_0_1", style=filled, fontname="Courier"];
-  11 [label="label pc_0_2", style=filled, fontname="Courier"];
-  12 [label="label pc_0_3", style=filled, fontname="Courier"];
-  13 [label="7.", color="#66CCFF", style=filled, fontname="Courier"];
-  14 [label="1.", color="#66CCFF", style=filled, fontname="Courier"];
-  15 [label="label pc_0_3", style=filled, fontname="Courier"];
-  16 [label="label pc_0_2", style=filled, fontname="Courier"];
-  20 [label="8.", color="#66CCFF", style=filled, fontname="Courier"];
-  21 [label="6.", color="#66CCFF", style=filled, fontname="Courier"];
-  23 [label="label pc_0_3", style=filled, fontname="Courier"];
-  24 [label="10.", color="#66CCFF", style=filled, fontname="Courier"];
-  25 [label="5.", color="#66CCFF", style=filled, fontname="Courier"];
-  26 [label="label pc_0_3", style=filled, fontname="Courier"];
-  28 [label="label pc_0_3", style=filled, fontname="Courier"];
-  29 [label="12.", color="#66CCFF", style=filled, fontname="Courier"];
-  30 [label="2.", color="#66CCFF", style=filled, fontname="Courier"];
-  31 [label="label pc_0_3", style=filled, fontname="Courier"];
-  33 [label="13.", color="#66CCFF", style=filled, fontname="Courier"];
-  34 [label="3.", color="#66CCFF", style=filled, fontname="Courier"];
-  38 [label="14.", color="#66CCFF", style=filled, fontname="Courier"];
-  39 [label="11.", color="#66CCFF", style=filled, fontname="Courier"];
-  41 [label="15.", color="#66CCFF", style=filled, fontname="Courier"];
-  42 [label="9.", color="#66CCFF", style=filled, fontname="Courier"];
+  4 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  5 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  6 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  7 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  8 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  9 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+     fontname="Courier"];
+  10 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  11 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  12 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  13 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  14 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  15 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  16 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  17 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  18 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  19 [label="Unsat or flip limit reached", color="#FF9999", style=filled,
+      fontname="Courier"];
+  20 [label="0.", color="#66CCFF", style=filled, fontname="Courier"];
+  21 [label="label pc_0_17", style=filled, fontname="Courier"];
+  22 [label="label pc_0_16", style=filled, fontname="Courier"];
+  23 [label="label pc_0_15", style=filled, fontname="Courier"];
+  24 [label="label pc_0_14", style=filled, fontname="Courier"];
+  25 [label="label pc_0_13", style=filled, fontname="Courier"];
+  26 [label="label pc_0_12", style=filled, fontname="Courier"];
+  27 [label="label pc_0_11", style=filled, fontname="Courier"];
+  28 [label="label pc_0_10", style=filled, fontname="Courier"];
+  29 [label="label pc_0_9", style=filled, fontname="Courier"];
+  30 [label="label pc_0_8", style=filled, fontname="Courier"];
+  31 [label="label pc_0_7", style=filled, fontname="Courier"];
+  32 [label="label pc_0_6", style=filled, fontname="Courier"];
+  33 [label="label pc_0_5", style=filled, fontname="Courier"];
+  34 [label="label pc_0_4", style=filled, fontname="Courier"];
+  35 [label="label pc_0_3", style=filled, fontname="Courier"];
+  36 [label="label pc_0_2", style=filled, fontname="Courier"];
+  37 [label="label pc_0_1", style=filled, fontname="Courier"];
+  39 [label="2.", color="#66CCFF", style=filled, fontname="Courier"];
+  40 [label="1.", color="#66CCFF", style=filled, fontname="Courier"];
   
   
   1 -> 2 [label="t", color="#99CCFF"];
-  1 -> 9 [label="f", color="#99CCFF"];
-  2 -> 11 [label="t", color="#99CCFF"];
-  2 -> 16 [label="f", color="#99CCFF"];
-  3 -> 28 [label="t", color="#99CCFF"];
-  3 -> 31 [label="f", color="#99CCFF"];
-  4 -> 33 [label="t", color="#99CCFF"];
-  4 -> 34 [label="f", color="#99CCFF"];
-  7 -> 5 [label="t", color="#99CCFF"];
-  7 -> 6 [label="f", color="#99CCFF"];
-  8 -> 4 [label="t", color="#99CCFF"];
-  8 -> 7 [label="f", color="#99CCFF"];
-  9 -> 3 [label="t", color="#99CCFF"];
-  9 -> 8 [label="f", color="#99CCFF"];
-  11 -> 23 [label="t", color="#99CCFF"];
-  11 -> 26 [label="f", color="#99CCFF"];
-  12 -> 20 [label="t", color="#99CCFF"];
-  12 -> 21 [label="f", color="#99CCFF"];
-  15 -> 13 [label="t", color="#99CCFF"];
-  15 -> 14 [label="f", color="#99CCFF"];
-  16 -> 12 [label="t", color="#99CCFF"];
-  16 -> 15 [label="f", color="#99CCFF"];
-  23 -> 41 [label="t", color="#99CCFF"];
-  23 -> 42 [label="f", color="#99CCFF"];
-  26 -> 24 [label="t", color="#99CCFF"];
+  1 -> 37 [label="f", color="#99CCFF"];
+  3 -> 39 [label="t", color="#99CCFF"];
+  3 -> 40 [label="f", color="#99CCFF"];
+  21 -> 19 [label="f", color="#99CCFF"];
+  21 -> 20 [label="t", color="#99CCFF"];
+  22 -> 18 [label="t", color="#99CCFF"];
+  22 -> 21 [label="f", color="#99CCFF"];
+  23 -> 17 [label="t", color="#99CCFF"];
+  23 -> 22 [label="f", color="#99CCFF"];
+  24 -> 16 [label="t", color="#99CCFF"];
+  24 -> 23 [label="f", color="#99CCFF"];
+  25 -> 15 [label="t", color="#99CCFF"];
+  25 -> 24 [label="f", color="#99CCFF"];
+  26 -> 14 [label="t", color="#99CCFF"];
   26 -> 25 [label="f", color="#99CCFF"];
-  28 -> 38 [label="t", color="#99CCFF"];
-  28 -> 39 [label="f", color="#99CCFF"];
-  31 -> 29 [label="t", color="#99CCFF"];
+  27 -> 13 [label="t", color="#99CCFF"];
+  27 -> 26 [label="f", color="#99CCFF"];
+  28 -> 12 [label="t", color="#99CCFF"];
+  28 -> 27 [label="f", color="#99CCFF"];
+  29 -> 11 [label="t", color="#99CCFF"];
+  29 -> 28 [label="f", color="#99CCFF"];
+  30 -> 10 [label="t", color="#99CCFF"];
+  30 -> 29 [label="f", color="#99CCFF"];
+  31 -> 9 [label="t", color="#99CCFF"];
   31 -> 30 [label="f", color="#99CCFF"];
+  32 -> 8 [label="t", color="#99CCFF"];
+  32 -> 31 [label="f", color="#99CCFF"];
+  33 -> 7 [label="t", color="#99CCFF"];
+  33 -> 32 [label="f", color="#99CCFF"];
+  34 -> 6 [label="t", color="#99CCFF"];
+  34 -> 33 [label="f", color="#99CCFF"];
+  35 -> 5 [label="t", color="#99CCFF"];
+  35 -> 34 [label="f", color="#99CCFF"];
+  36 -> 4 [label="t", color="#99CCFF"];
+  36 -> 35 [label="f", color="#99CCFF"];
+  37 -> 3 [label="t", color="#99CCFF"];
+  37 -> 36 [label="f", color="#99CCFF"];
   
   }

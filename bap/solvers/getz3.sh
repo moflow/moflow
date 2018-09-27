@@ -8,5 +8,5 @@ else
     url="http://research.microsoft.com/projects/z3/z3-3.2.tar.gz"
 fi
 
-wget $url -O - | tar -xvz -C $DIR
+#wget $url -O - | tar -xvz -C $DIR
 cd $DIR/z3/ocaml && ./build-lib.sh $(ocamlfind query unix)
