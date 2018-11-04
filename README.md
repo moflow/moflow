@@ -1,3 +1,12 @@
+```
+
+   /\____   ___  zS!
+ _/__\__ \_/   \   ___  /\_    ______
+/  /  /  /  /  / _/ __\/  /  _/   \_ \/\___
+¯\/¯\/__/¯\___/ /  __\/  /__/  /  /  / /  /
+                ¯\/   ¯\___/¯\___/¯\_____/
+```
+
 # moflow-0.8  
 
 This version is compatible with BAP-0.8 which includes x86/x64 target support  
