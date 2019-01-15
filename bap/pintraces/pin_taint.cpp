@@ -731,7 +731,8 @@ FrameOption_t TaintTracker::taintPostSC(const uint32_t bytes,
         if (bytes != (uint32_t)(UNIX_FAILURE)) { /* -1 == error */
           /* args[0] is filename */
           const char *filename = reinterpret_cast<const char *> (args[0]);
-          fdInfo_t fdinfo(string("file \"") + string(filename) + string("\""), 0);
+          //fdInfo_t fdinfo(string("file \"") + string(filename) + string("\""), 0);
+          fdInfo_t fdinfo(string("file ") + string(filename), 0);
           fds[bytes] = fdinfo;
         }
         break;
