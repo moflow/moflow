@@ -2179,10 +2179,12 @@ VOID fill_blacklist(IMG img)
 VOID ModLoad(IMG img, VOID *v)
 {
 
-    if (g_verbose) cerr << "Loaded module: " 
-    << IMG_Name(img) << " 0x" << hex << IMG_LowAddress(img) 
+    //if (g_verbose) 
+    cerr << "Loaded module: " 
+    << StringFromAddrint(IMG_LowAddress(img))
     << " - " 
-    << hex << IMG_HighAddress(img) << dec
+    << StringFromAddrint(IMG_HighAddress(img))
+    << "  " << IMG_Name(img) 
     << endl;
 
     fill_blacklist(img);
