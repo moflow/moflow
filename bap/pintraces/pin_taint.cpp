@@ -4,6 +4,7 @@
 #include "winsyscalls.h"
 #include "trace.container.hpp"
 #include <cassert>
+#include <iostream>
 #include <sstream>
 #ifndef _WIN32
 #include <unistd.h>             // due to Debian 7
@@ -46,6 +47,8 @@ int g_skipTaints = 0;
 /** Reuse taint ids? */
 const bool reuse_taintids = true;
 
+uint32_t g_syscall_tid = 0;
+
 /**************** Helper **********************/
 
 /** Convert a wide string to a narrow one
@@ -70,9 +73,8 @@ bool defaultPolicy(ADDRINT addr, uint32_t length, const char *msg) {
 
   intronum++;
 
-  cerr << "Taint introduction #" << intronum
-       << ". @" << addr << "/" << length << " bytes: "
-       << msg << endl;
+  cerr << "Taint introduction #" << intronum << " in thread " << dec << g_syscall_tid << ": "  << endl
+       << "  Reading " << dec << length << " bytes from " << msg << " into memory @ 0x" << hex << addr << dec << endl;
 
   if (intronum >= g_skipTaints) {
     return true;
@@ -226,7 +228,7 @@ FrameOption_t TaintTracker::introMemTaint(ADDRINT addr, uint32_t length, const c
   FrameOption_t fb;
 
   if ((*pf)(addr, length, source) && length > 0) {
-
+    cerr << "  Tainted bytes tagged with ID range " << taintnum << " - " << taintnum + length -1 << endl;
     for (unsigned int i = 0; i < length; i++) {
       uint32_t t = 0;
       if (offset == -1 || reuse_taintids == false) {
@@ -240,7 +242,7 @@ FrameOption_t TaintTracker::introMemTaint(ADDRINT addr, uint32_t length, const c
         } else {
           t = taintnum++;
           taint_mappings[r] = t;
-          cerr << "adding new mapping from " << source << " to " << offset+i << " on taint num " << t << endl;
+          //if(g_verbose) cerr << "adding new mapping from " << source << " to " << offset+i << " on taint num " << t << endl;
         }
       }
       /* Mark memory as tainted */
@@ -355,7 +357,7 @@ void TaintTracker::postSysCall(context &delta) {
 
 void TaintTracker::acceptHelper(uint32_t fd) {
   if (taint_net) {
-    cerr << "Tainting fd " << fd << endl;
+    cerr << "Tainting fd from accept() " << fd << endl;
     fdInfo_t fdinfo(string("accept"), 0);
     fds[fd] = fdinfo;
   }
@@ -365,7 +367,7 @@ FrameOption_t TaintTracker::recvHelper(uint32_t fd, void *ptr, size_t len) {
   ADDRINT addr = reinterpret_cast<ADDRINT> (ptr);
 
   if (fds.find(fd) != fds.end()) {
-    cerr << "Tainting " << len << " bytes of recv @" << addr << endl;
+    cerr << "Tainting " << len << " bytes of recv() @" << addr << endl;
     return introMemTaintFromFd(fd, addr, len);
   } else {
     return FrameOption_t(false);
@@ -498,8 +500,9 @@ std::vector<frame> TaintTracker::taintEnv(char **env)
 #endif
 
 /** This function is called right before a system call. */
-bool TaintTracker::taintPreSC(uint32_t callno, const uint64_t *args, /* out */ uint32_t &state)
+bool TaintTracker::taintPreSC(uint32_t callno, const uint64_t *args, /* out */ uint32_t &state, uint32_t threadid)
 {
+  g_syscall_tid = threadid;
   dbg_printf("taintPreSC callno=%d arg0=0x%016lx arg1=0x%016lx arg2=0x%016lx\n", callno, args[0], args[1], args[2]);
   //cout << "Syscall no: " << callno << endl << "Args:" ;
   //for ( int i = 0 ; i < MAX_SYSCALL_ARGS ; i ++ )
@@ -534,9 +537,9 @@ bool TaintTracker::taintPreSC(uint32_t callno, const uint64_t *args, /* out */ u
           }
         }
         if (state == __NR_open) {
-          cerr << "Opening tainted file: " << cppfilename << endl;
+          cerr << "Tainted file \"" << cppfilename << "\" opened by thread " << dec << threadid << endl;
         } else {
-          cerr << "Not opening " << cppfilename << endl;
+          //cerr << "Not tracking taint on: " << cppfilename << endl;
         }
       }
         break;
@@ -609,9 +612,9 @@ bool TaintTracker::taintPreSC(uint32_t callno, const uint64_t *args, /* out */ u
         }
       }
       if (state == __NR_createfilewin) {
-        cerr << "Opening tainted file: " << tempcppstr << endl;
+        if (g_verbose) cerr << "Opening tainted file: " << tempcppstr << endl;
       } else {
-        cerr << "Not opening " << tempcppstr << endl;
+        if (g_verbose) cerr << "Not opening " << tempcppstr << endl;
       }
       
       break;
@@ -728,13 +731,14 @@ FrameOption_t TaintTracker::taintPostSC(const uint32_t bytes,
         if (bytes != (uint32_t)(UNIX_FAILURE)) { /* -1 == error */
           /* args[0] is filename */
           const char *filename = reinterpret_cast<const char *> (args[0]);
-          fdInfo_t fdinfo(string("file ") + string(filename), 0);
+          fdInfo_t fdinfo(string("file \"") + string(filename) + string("\""), 0);
           fds[bytes] = fdinfo;
         }
         break;
       case __NR_close:
         if (bytes == (uint32_t)(UNIX_SUCCESS) && fds.find(args[0]) != fds.end()) {
-          cerr << "closed tainted fd " << args[0] << endl;
+          // if(g_verbose)
+          //cerr << "closed tainted fd " << args[0] << endl;
           fds.erase(args[0]);
         }
         break;
@@ -767,11 +771,12 @@ FrameOption_t TaintTracker::taintPostSC(const uint32_t bytes,
         addr = args[1];
         length = bytes;
         if ((int)length != -1) {
+          /*
           cerr << "Tainting "
-               << length
-               << " bytes from read at " << addr << ", fd=" << args[0]
+               << dec << length
+               << " bytes from read() at 0x" << hex << addr << dec << ", fd=" << args[0]
                << endl;
-
+          */
           return introMemTaintFromFd(fd, addr, length);
         }
         break;
@@ -828,8 +833,8 @@ FrameOption_t TaintTracker::taintPostSC(const uint32_t bytes,
             addr = args[5];
             assert(addr);
             cerr << "Tainting " 
-                 << length 
-                 << " bytes from read @" << addr << endl;
+                 << dec << length 
+                 << " bytes from read() @" << hex << addr << endl;
             return introMemTaintFromFd(args[0], addr, length);
           }
         }
@@ -873,8 +878,8 @@ FrameOption_t TaintTracker::taintPostSC(const uint32_t bytes,
           addr = *(reinterpret_cast<ADDRINT *> (args[2])); /// XXX: possibly wrong
           assert(addr);
           cerr << "Tainting " 
-               << length 
-               << " bytes from read @" << addr << endl;
+               << dec << length 
+               << " bytes from read() @ 0x" << hex << addr << endl;
           return introMemTaint(addr, length, "read", -1);
           //return true;
         }
