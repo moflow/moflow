@@ -139,6 +139,10 @@ namespace WINDOWS {
 #define DEBUG_LOCK 0
 #endif
 
+KNOB<bool> KnobVerbose(KNOB_MODE_WRITEONCE, "pintool",
+                          "v", "false",
+                          "Enable verbose tool output");
+
 KNOB<string> KnobOut(KNOB_MODE_WRITEONCE, "pintool",
                      "o", "out.bpt",
                      "Trace file to output to.");
@@ -407,6 +411,7 @@ int g_counter = 0;
 //TraceWriter *g_tw;
 TraceContainerWriter *g_twnew;
 
+bool g_verbose = false;
 bool g_logCoverage;
 FILE *g_bbfile = NULL;
 FILE *g_visited_bb_file = NULL;
@@ -681,7 +686,7 @@ VOID Activate(CONTEXT *ctx)
 VOID TActivate()
 {
     dbg_printf("TActivate\n");
-    cerr << "Activating taint analysis " << endl;
+    if(g_verbose) cerr << "Activating taint analysis " << endl;
     g_active = true; /* Any instruction could be logged because taint is
                         introduced. */
     g_taint_introduced = true; /* Taint is definitely introduced now. */
@@ -1360,12 +1365,12 @@ VOID AppendBuffer(ADDRINT addr,
          * instructions */
 
         if (firstLogged) {
-            cerr << "First logged instruction" << endl;
+            if (g_verbose) cerr << "First logged instruction" << endl;
             firstLogged = false;
         }
 
         if (has_taint && firstTaint) {
-            cerr << "First tainted instruction" << endl;
+            if (g_verbose) cerr << "First tainted instruction" << endl;
             LOG("First tainted instruction.\n");
             firstTaint = false;
         }
@@ -2174,7 +2179,13 @@ VOID fill_blacklist(IMG img)
 VOID ModLoad(IMG img, VOID *v)
 {
 
-    cerr << "This is modload()" << endl;
+    //if (g_verbose) 
+    cerr << "Loaded module: " 
+    << StringFromAddrint(IMG_LowAddress(img))
+    << " - " 
+    << StringFromAddrint(IMG_HighAddress(img))
+    << "  " << IMG_Name(img) 
+    << endl;
 
     fill_blacklist(img);
 
@@ -2573,7 +2584,7 @@ VOID SyscallEntry(THREADID tid, CONTEXT *ctx, SYSCALL_STANDARD std, VOID *v)
         g_twnew->add(si.sf);
     }
 
-    if (tracker->taintPreSC(si.sf.mutable_syscall_frame()->number(), (const uint64_t *) (si.sf.syscall_frame().argument_list().elem().data()), si.state)) {
+    if (tracker->taintPreSC(si.sf.mutable_syscall_frame()->number(), (const uint64_t *) (si.sf.syscall_frame().argument_list().elem().data()), si.state, (uint32_t)tid)) {
         // Do we need to do anything here? ...
     }
     ti->scStack.push(si);
@@ -2657,6 +2668,7 @@ VOID FollowParent(THREADID threadid, const CONTEXT* ctxt, VOID * arg)
 VOID ExceptionHandler(THREADID threadid, CONTEXT_CHANGE_REASON reason, const CONTEXT *from, CONTEXT *to, INT32 info, VOID *v) {
 
     dbg_printf("ExceptionHandler tid=%d info=0x%x v=%p\n", threadid, info, v);
+
     /*
       CONTEXT_CHANGE_REASON_FATALSIGNAL          Receipt of fatal Unix signal.
       CONTEXT_CHANGE_REASON_SIGNAL       Receipt of handled Unix signal.
@@ -2719,7 +2731,7 @@ VOID ExceptionHandler(THREADID threadid, CONTEXT_CHANGE_REASON reason, const CON
     }
 
     if (reason == CONTEXT_CHANGE_REASON_FATALSIGNAL) {
-        std::cerr << "Received fatal signal " << info << endl;
+        std::cerr << "Exiting: fatal signal " << dec << info << " in thread " << dec << threadid << endl;
         FlushBuffer(false, from, threadid, false);
         Cleanup();
         exit(0);
@@ -2945,6 +2957,12 @@ int main(int argc, char *argv[])
 
     PIN_InitLock(&lock);
 
+    // Check if coverage tracking is on
+    if (KnobVerbose.Value())
+    {
+      g_verbose = true;
+    }
+
     // Check if a trigger was specified.
     if (KnobTrigAddr.Value() != 0) {
         g_usetrigger = true;
@@ -3026,7 +3044,7 @@ int main(int argc, char *argv[])
         }
     }
 
-    cerr << "Logging initially enabled: " << g_active << endl;
+    if (g_verbose) cerr << "Logging initially enabled: " << g_active << endl;
 
     g_mem_snapshot = 0;
     if (SnapshotFile.Value() != "") {
@@ -3089,7 +3107,7 @@ int main(int argc, char *argv[])
     start_addr = TaintStart.Value();
     end_addr = TaintEnd.Value();
 
-    cerr << "Code cache limit is " << CODECACHE_CacheSizeLimit() << endl;
+    if (g_verbose) cerr << "Code cache limit is " << CODECACHE_CacheSizeLimit() << endl;
     assert(CODECACHE_ChangeCacheLimit(CacheLimit.Value()));
 
     LOG("Starting program\n");

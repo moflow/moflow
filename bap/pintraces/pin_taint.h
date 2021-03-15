@@ -134,7 +134,7 @@ namespace pintrace { // We will use namespace to avoid collision
      /** A function to introduce taint in the contexts. Writes
          information to state; this state must be passed to
          taintIntro */
-     bool taintPreSC(uint32_t callno, const uint64_t * args, uint32_t &state);
+     bool taintPreSC(uint32_t callno, const uint64_t * args, uint32_t &state, uint32_t threadid);
 
      FrameOption_t taintPostSC(const uint32_t bytes,
                                const uint64_t * args,
